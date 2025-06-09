@@ -134,9 +134,9 @@ variables:
     }}
   sun_rising: >
     {% if (states.sun.sun.state == "above_horizon") %}
-        {{ states.sun.sun.last_changed }}
-    {%- else -%}
         {{ states.sun.sun.attributes.next_rising }}
+    {%- else -%}
+        {{ states.sun.sun.last_changed }}
     {%- endif %}
   sun_dusk: >
     {% if (states.sun.sun.state == "above_horizon") %}
