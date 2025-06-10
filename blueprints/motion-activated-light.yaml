@@ -132,14 +132,20 @@ variables:
                  | select('search', '^light\.') | list
               ) | selectattr('state', 'eq', 'on') | list | length  > 0)
     }}
+  is_between_dusk_and_dawn: >
+    {% if (as_timestamp(states.sun.sun.attributes.next_rising) > as_timestamp(states.sun.sun.attributes.next_dusk)) %}
+        {{ true }}
+    {%- else -%}
+        {{ false }}
+    {%- endif %}
   sun_rising: >
-    {% if (states.sun.sun.attributes.next_rising > states.sun.sun.attributes.next_dusk) %}
+    {% if (is_between_dusk_and_dawn) %}
         {{ states.sun.sun.last_changed }}
     {%- else -%}
         {{ states.sun.sun.attributes.next_rising }}
     {%- endif %}
   sun_dusk: >
-    {% if (states.sun.sun.attributes.next_rising > states.sun.sun.attributes.next_dusk) %}
+    {% if (is_between_dusk_and_dawn) %}
         {{ states.sun.sun.attributes.next_dusk }}
     {%- else -%}
         {{ states.sun.sun.last_changed }}
