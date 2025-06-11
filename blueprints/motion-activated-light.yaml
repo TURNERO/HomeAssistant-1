@@ -134,14 +134,14 @@ variables:
     }}
   sun_rising: >
     # This if expression evaluates to true if it's during the night, i.e. between dusk and dawn.
-    {% if (as_timestamp(states.sun.sun.attributes.next_dusk) > as_timestamp(states.sun.sun.attributes.next_rising)) %}
+    {% if (as_timestamp(states.sun.sun.attributes.next_dusk + rising_start_hour*3600 + rising_start_minute*60) > as_timestamp(states.sun.sun.attributes.next_rising) - dusk_start_hour*3600 - dusk_start_minute*60) %}
         {{ states.sun.sun.attributes.next_rising }}
     {%- else -%}
         {{ states.sun.sun.last_changed }}
     {%- endif %}
   sun_dusk: >
     # This if expression evaluates to true if it's during the night, i.e. between dusk and dawn.
-    {% if (as_timestamp(states.sun.sun.attributes.next_dusk) > as_timestamp(states.sun.sun.attributes.next_rising)) %}
+    {% if (as_timestamp(states.sun.sun.attributes.next_dusk + rising_start_hour*3600 + rising_start_minute*60) > as_timestamp(states.sun.sun.attributes.next_rising) - dusk_start_hour*3600 - dusk_start_minute*60) %}
         {{ states.sun.sun.last_changed }}
     {%- else -%}
         {{ states.sun.sun.attributes.next_dusk }}
