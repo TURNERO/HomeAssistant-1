@@ -133,16 +133,18 @@ variables:
               ) | selectattr('state', 'eq', 'on') | list | length  > 0)
     }}
   sun_rising: >
+    # This if expression evaluates to true if it's during the night, i.e. between dusk and dawn.
     {% if (as_timestamp(states.sun.sun.attributes.next_dusk) > as_timestamp(states.sun.sun.attributes.next_rising)) %}
-        {{ states.sun.sun.last_changed }}
-    {%- else -%}
         {{ states.sun.sun.attributes.next_rising }}
+    {%- else -%}
+        {{ states.sun.sun.last_changed }}
     {%- endif %}
   sun_dusk: >
+    # This if expression evaluates to true if it's during the night, i.e. between dusk and dawn.
     {% if (as_timestamp(states.sun.sun.attributes.next_dusk) > as_timestamp(states.sun.sun.attributes.next_rising)) %}
-        {{ states.sun.sun.attributes.next_dusk }}
-    {%- else -%}
         {{ states.sun.sun.last_changed }}
+    {%- else -%}
+        {{ states.sun.sun.attributes.next_dusk }}
     {%- endif %}
   weather_sensor: !input weather_entity
   no_sunny_weather: >
